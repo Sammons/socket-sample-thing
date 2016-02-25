@@ -1,0 +1,27 @@
+<html>
+    <body>
+        <h1>Sup</h1>
+        <div>Logged in?</div>
+        <div id="loggedin"></div>
+        <div id="joinedUsers"></div>
+        <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+        var socket = io();
+        $('#loggedin').text('Loading...')
+        socket.on('hello', (data) => { 
+              $.get('/pretend-login', (res) => {
+                  $('#loggedin').text('Make money. Get Turnt. Yes')
+                  console.log('got auth token', res.authToken);
+                  socket.emit('verify', { token: res.authToken });
+              })
+        });
+        socket.on('verify', (data) => {
+            console.log(data);
+        })
+        socket.on('joined', (data) => {
+            $('#joinedUsers').append($('<div/>').text(data));
+        })
+        </script>
+    </body>
+</html>
